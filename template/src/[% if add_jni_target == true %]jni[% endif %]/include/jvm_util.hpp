@@ -41,12 +41,12 @@ private:
         LOG(INFO) << "Loaded JVM Version " << ((ver >> 16) & 0x0f) << "." << (ver & 0x0f);
     }
 
-    ~Jvm() { // Shutdown the VM. But it never calls this
-        if (vm) {
-            vm->DestroyJavaVM();
-        }
-        vm = nullptr;
-    }
+    // ~Jvm() { // Shutdown the VM. Do not open it because resources are globally managed
+    //     if (vm) {
+    //         vm->DestroyJavaVM();
+    //     }
+    //     vm = nullptr;
+    // }
 
     Jvm(const Jvm &) = delete;
     Jvm &operator=(const Jvm &) = delete;
