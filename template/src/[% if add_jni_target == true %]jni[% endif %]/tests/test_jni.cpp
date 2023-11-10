@@ -4,28 +4,8 @@
 #include "absl/log/log.h"
 #include "jvm_util.hpp"
 
-TEST(jvm, JvmInitFail) {
-    ASSERT_EXIT(jvm::Jvm::instance(),
-                ::testing::ExitedWithCode(255), // will exit -1
-                ".*"                            // match anything output
-    );
-}
-
-TEST(jvm, JvmCallJava) {
-    const jint jvm_version = JNI_VERSION_19;
-    std::vector<JavaVMOption> vm_options{
-        JavaVMOption{
-            .optionString = (char*)"-Djava.class.path=test_jar.jar",
-            .extraInfo = nullptr,
-        },
-    };
-    JavaVMInitArgs vm_args;
-    vm_args.version = jvm_version;       // minimum Java version
-    vm_args.options = vm_options.data(); // JVM invocation options
-    vm_args.nOptions = vm_options.size();
-    vm_args.ignoreUnrecognized = 1; // invalid options make the JVM init fail
-
-    jvm::Jvm::instance(vm_args).call([](JNIEnv* env) {
+TEST(jvm, ConstructHelloWordString) {
+    jvm::Jvm::instance().call([](JNIEnv* env) {
         // Construct a String
         jstring jstr = env->NewStringUTF("Hello World");
 
@@ -44,7 +24,9 @@ TEST(jvm, JvmCallJava) {
         // Clean up
         env->ReleaseStringUTFChars(jstr, str);
     });
+}
 
+TEST(jvm, CallMainJar) {
     jvm::Jvm::instance().call([](JNIEnv* env) {
         jclass j_my_test = env->FindClass("MyTest");
         jmethodID j_mymain = env->GetStaticMethodID(j_my_test, "mymain", "()V");

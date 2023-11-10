@@ -25,9 +25,7 @@ install_target(
   LICENSE_FILE_LIST
   ${CMAKE_SOURCE_DIR}/LICENSE
   DEPENDENCIES
-  absl::log
-  PRE_EXCLUDE_REGEXES
-  "jvm\.*")
+  absl::log)
 
 # Test
 if(BUILD_TESTING)
