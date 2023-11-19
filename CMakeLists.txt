@@ -17,6 +17,11 @@ set(VCPKG_VERBOSE
     ON
     CACHE BOOL "Vcpkg VCPKG_VERBOSE")
 
+# Enable vcpkg environment before project configuration
+set(CMAKE_PLATFORM_INFO_DIR
+    ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${CMAKE_VERSION})
+include(CMakeDetermineSystem)
+
 # Project settings
 project(
   ss-cpp
