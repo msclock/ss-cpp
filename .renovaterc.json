@@ -1,0 +1,110 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":enablePreCommit",
+    ":maintainLockFilesWeekly"
+  ],
+  "packageRules": [
+    {
+      "groupName": "renovate docker tag",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchDepNames": [
+        "ghcr.io/renovatebot/renovate",
+        "renovate/renovate"
+      ]
+    },
+    {
+      "matchDepTypes": [
+        "action"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "find template -type f -exec sed -i 's|{{{depName}}}@{{{currentDigest}}} # {{{currentValue}}}|{{{depName}}}@{{{newDigest}}} # {{{newValue}}}|g' {} +"
+        ]
+      }
+    },
+    {
+      "matchDepTypes": [
+        "github-runner"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "find template -type f -exec sed -i 's|{{{depName}}}-{{{currentValue}}}|{{{depName}}}-{{{newValue}}}|g' {} +"
+        ]
+      }
+    },
+    {
+      "matchManagers": [
+        "pre-commit"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "find template -type f -name '.pre-commit-config.yaml.jinja' -exec sed -i '/{{{replace \"/\" \"\\/\" depName}}}/{N;s/rev: {{{currentValue}}}/rev: {{{newValue}}}/}' {} +"
+        ]
+      }
+    },
+    {
+      "matchDepTypes": [
+        "container",
+        "image",
+        "image-name",
+        "service-image"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "find template -type f -exec sed -i 's|{{{depName}}}:{{{currentValue}}}@{{{currentDigest}}}|{{{depName}}}:{{{newValue}}}@{{{newDigest}}}|g' {} +"
+        ]
+      }
+    },
+    {
+      "commitMessageTopic": "serious-scaffold-python",
+      "matchDepTypes": [
+        "copier-template"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "git stash",
+          "pip install copier",
+          "copier update --defaults --vcs-ref {{{newVersion}}}"
+        ]
+      },
+      "semanticCommitScope": "copier-template"
+    },
+    {
+      "description": "Group apt packages to avoid failure when multiple packages are outdated.",
+      "groupName": "apt packages",
+      "matchDepTypes": [
+        "apt"
+      ]
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "pypi",
+      "fileMatch": [
+        "^\\.github\\/workflows\\/ci.yml$",
+        "^template\\/\\.github\\/workflows\\/ci.yml$"
+      ],
+      "matchStrings": [
+        "pipx install (?<depName>.*?)==(?<currentValue>.*?)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "git-tags",
+      "depNameTemplate": "https://github.com/serious-scaffold/ss-cpp.git",
+      "depTypeTemplate": "copier-template",
+      "fileMatch": [
+        "^\\.copier-answers\\.yml$"
+      ],
+      "matchStrings": [
+        "_commit: (?<currentValue>.*?)\n"
+      ],
+      "versioningTemplate": "semver"
+    }
+  ]
+}
