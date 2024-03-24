@@ -157,6 +157,42 @@
         "_commit: (?<currentValue>.*?)\n"
       ],
       "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update vcpkg dependencies of cmake-registry in vcpkg.json",
+      "customType": "regex",
+      "fileMatch": [
+        "^vcpkg\\.json$"
+      ],
+      "matchStrings": [
+        "\"name\": \"(?<depName>.*?)\"[^}]+?\"(?<versionMatcher>version-string|version)\": \"(?<currentValue>.*?)\""
+      ],
+      "datasourceTemplate": "custom.cmake-registry"
+    },
+    {
+      "description": "Update vcpkg dependencies of vcpkg-registry in vcpkg.json",
+      "customType": "regex",
+      "fileMatch": [
+        "^vcpkg\\.json$"
+      ],
+      "matchStrings": [
+        "\"name\": \"(?<depName>.*?)\"[^}]+?\"(?<versionMatcher>version-string|version)\": \"(?<currentValue>.*?)\""
+      ],
+      "datasourceTemplate": "custom.vcpkg-registry"
     }
-  ]
+  ],
+  "customDatasources": {
+    "cmake-registry": {
+      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/msclock/cmake-registry/master/versions/{{{replace '(.).*' '$1-' packageName}}}/{{{packageName}}}.json",
+      "transformTemplates": [
+        "{ \"releases\": $map($.versions,function($v) { { \"version\": $v.version } }) }"
+      ]
+    },
+    "vcpkg-registry": {
+      "defaultRegistryUrlTemplate": "https://raw.githubusercontent.com/microsoft/vcpkg/master/versions/{{{replace '(.).*' '$1-' packageName}}}/{{{packageName}}}.json",
+      "transformTemplates": [
+        "{ \"releases\": $map($.versions,function($v) { { \"version\": $v.version } }) }"
+      ]
+    }
+  }
 }
