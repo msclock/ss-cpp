@@ -1,0 +1,5 @@
+include:
+  - local: /.gitlab/templates/pages.yml
+
+pages:
+  stage: deploy

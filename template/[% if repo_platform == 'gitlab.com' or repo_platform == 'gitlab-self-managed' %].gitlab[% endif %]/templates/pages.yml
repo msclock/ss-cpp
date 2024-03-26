@@ -1,0 +1,17 @@
+include:
+  - remote: https://gitlab.com/msclock/gitlab-ci-templates/-/raw/v2.6.11/jobs/Pages-Sphinx.gitlab-ci.yml
+
+.pages_sphinx::scripts:
+  Setup Docs Tool: |-
+    # Install setup-cpp todo
+    pip install -r docs/requirements.txt
+  Make Not Versioning Docs: |-
+    cmake -S . --preset=x64-linux-gcc -DBUILD_TESTING=OFF -DCODE_COVERAGE=OFF
+    cmake --build out/build/x64-linux-gcc --target {{ repo_name }}-docs
+    mkdir -p public && cp -rf docs/_build/html/* public/
+
+._pages_common:
+  stage: deploy
+  variables:
+    # Skip to deploy versioned docs for now
+    VERSION_DOCS: ''

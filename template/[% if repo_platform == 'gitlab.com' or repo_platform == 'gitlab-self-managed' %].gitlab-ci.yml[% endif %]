@@ -1,0 +1,6 @@
+include:
+  - .gitlab/workflows/**.yml
+
+default:
+  artifacts:
+    expire_in: 1 week
