@@ -1,0 +1,124 @@
+# CI jobs in a pipeline
+
+include:
+  - remote: https://gitlab.com/msclock/gitlab-ci-templates/-/raw/v2.6.11/collections/All-Projects.gitlab-ci.yml
+  - local: /.gitlab/templates/build.yml
+  - local: /.gitlab/templates/pages.yml
+
+variables:
+  LINT_YAML_ENABLE: ''
+  LINT_MD_ENABLE: ''
+
+# @Description lint codebase with pre-commit
+pre_commit:
+  stage: lint
+  variables:
+    PRE_COMMIT_EXTRA_ARGS: --hook-stage manual --all-files
+
+[%- if repo_name == 'ss-cpp' %]
+# @Description check for consistency with template
+consistency:
+  stage: lint
+  extends: .python
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  script:
+    - !reference [.security_check_sensible, script]
+    - !reference [.common_git::template, script]
+    - |
+      pip install pipx
+      pipx install copier
+      find . -maxdepth 1 ! -name '.' \
+          ! -name 'template' \
+          ! -name 'includes' \
+          ! -name '.git' \
+          ! -name 'copier.yml' \
+          -exec rm -r {} +
+        copier copy -r HEAD -f . .
+        rm .copier-answers.yml
+    - |
+      echo "List inconsistent files:"
+      git status --porcelain
+    - |
+      git diff --exit-code || ( \
+        echo "# :warning: Inconsistent files found" && \
+        echo "The following files are inconsistent with the template:" && \
+        git status --porcelain | while read file; do echo "- $file"; done && \
+        echo "" && \
+        echo "Please run 'copier copy -r HEAD -f . .' to fix them." && \
+        exit 1 \
+      )
+[%- endif %]
+
+# @Description checks on Windows
+checks_on_windows:
+  stage: build
+  tags:
+    # https://docs.gitlab.com/ee/ci/runners/hosted_runners/windows.html
+    - saas-windows-medium-amd64 # Windows
+  parallel:
+    matrix:
+      - COMPILER:
+          - llvm
+          - mingw
+          - msvc
+        ARCH:
+          - x64
+        VCPKG:
+          - 'TRUE'
+          - 'FALSE'
+        EXPORT_MODE:
+          - 'TRUE'
+          - 'FALSE'
+  script:
+    - !reference [.build::setup_cpp, windows]
+    - |
+      # setup-cpp installs the required compilers and tools
+      echo COMPILER:$COMPILER
+      echo ARCH:$ARCH
+      echo VCPKG:$VCPKG
+      echo EXPORT_MODE:$EXPORT_MODE
+
+# @Description checks on Linux
+checks_on_linux:
+  stage: build
+  tags:
+    # https://docs.gitlab.com/ee/ci/runners/hosted_runners/linux.html
+    - saas-linux-medium-amd64 # Linux
+  parallel:
+    matrix:
+      - COMPILER:
+          - gcc-11
+          - llvm
+          - mingw
+          # - msvc
+        ARCH:
+          - x64
+        VCPKG:
+          - 'TRUE'
+          - 'FALSE'
+        EXPORT_MODE:
+          - 'TRUE'
+          - 'FALSE'
+  script:
+    - !reference [.build::setup_cpp, linux]
+    - |
+      # setup-cpp installs the required compilers and tools
+      echo COMPILER:$COMPILER
+      echo ARCH:$ARCH
+      echo VCPKG:$VCPKG
+      echo EXPORT_MODE:$EXPORT_MODE
+
+# @Description review deploy pages with mkdocs
+pages:review:
+  stage: deploy
+
+# @Description semantic_release
+semantic_release:
+  stage: release
+  variables:
+    RELEASE_EXTRA_PLUGINS: >-
+      @semantic-release/git
+      conventional-changelog-conventionalcommits
+      @semantic-release/exec

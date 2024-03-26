@@ -1,0 +1,33 @@
+# This defines commands to install cpp stuffs through setup-cpp. See https://github.com/aminya/setup-cpp
+.build::setup_cpp:
+  windows: |-
+    # setup-cpp installs the required compilers and tools
+    curl -LJO "https://github.com/aminya/setup-cpp/releases/download/v0.37.0/setup-cpp-x64-windows.exe"
+    ./setup-cpp-x64-windows \
+      --compiler llvm \
+      --cmake true \
+      --ninja true \
+      --ccache true \
+      --opencppcoverage true \
+      --vcpkg true
+    RefreshEnv.cmd # activate cpp environment variables
+  linux: |-
+    wget "https://github.com/aminya/setup-cpp/releases/download/v0.37.0/setup-cpp-x64-linux"
+    chmod +x ./setup-cpp-x64-linux
+    ./setup-cpp-x64-linux \
+      --compiler llvm \
+      --cmake true \
+      --ninja true \
+      --ccache true \
+      --vcpkg true
+    source ~/.cpprc # activate cpp environment variables
+  macos: |-
+    wget "https://github.com/aminya/setup-cpp/releases/download/v0.37.0/setup-cpp-x64-macos"
+    chmod +x ./setup-cpp-x64-macos
+    ./setup-cpp-x64-macos \
+      --compiler llvm \
+      --cmake true \
+      --ninja true \
+      --ccache true \
+      --vcpkg true
+    source ~/.cpprc # activate cpp environment variables
