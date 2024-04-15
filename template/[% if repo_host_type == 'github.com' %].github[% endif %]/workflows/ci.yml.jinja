@@ -299,9 +299,8 @@ jobs:
           -DCMAKE_C_COMPILER={{ '${{ contains(matrix.compiler, \'msvc\') && \'"cl"\' || contains(matrix.compiler, \'llvm\') && \'"clang-cl.exe"\' }}' }}
           -DCMAKE_CXX_COMPILER={{ '${{ contains(matrix.compiler, \'msvc\') && \'"cl"\' || contains(matrix.compiler, \'llvm\') && \'"clang-cl.exe"\' }}' }}
           -DCMAKE_COMPILE_WARNING_AS_ERROR=ON
-          -DUSE_SANITIZER={{ '${{ contains(matrix.compiler, \'llvm\') && \'OFF\' || \'ON\' }}' }}
+          {{ '${{ contains(matrix.compiler, \'llvm\') && \'-DUSE_SANITIZER=OFF\' || \'\' }}' }}
           -DVCPKG_TARGET_TRIPLET={{ '${{ matrix.triplet }}' }}
-          -DUSE_SANITIZER=OFF
           -DCODE_COVERAGE=ON
           -DBUILD_TESTING=ON
 
