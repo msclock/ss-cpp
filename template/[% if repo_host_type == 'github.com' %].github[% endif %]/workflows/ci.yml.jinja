@@ -21,7 +21,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
         with:
           fetch-depth: 0
 
@@ -37,7 +37,7 @@ jobs:
     if: {{ '${{ !cancelled() && ! failure() }}' }}
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
         with:
           fetch-depth: 0
 
@@ -132,7 +132,7 @@ jobs:
           - cppcheck: true
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
         with:
           fetch-depth: 0
 
@@ -229,7 +229,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
 
       - name: Cache
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
@@ -303,7 +303,7 @@ jobs:
           echo "# :warning: GITHUB_TOKEN is used" >> $GITHUB_STEP_SUMMARY
           echo "The GITHUB_TOKEN is used instead of a bot token or PAT that will not emit the released publish event for triggering a released workflow." >> $GITHUB_STEP_SUMMARY
 
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
         with:
           fetch-depth: 0
           token: {{ '${{ steps.bot_token.outputs.token || secrets.PAT || secrets.GITHUB_TOKEN }}' }}
