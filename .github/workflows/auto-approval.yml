@@ -1,12 +1,17 @@
 name: Auto approve
 
 on:
-  pull_request_target:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
 
 jobs:
   approve:
     runs-on: ubuntu-22.04
-    if: contains(github.event.pull_request.labels.*.name, 'auto-approval')
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      contains(github.event.pull_request.labels.*.name, 'auto-approval')
     permissions:
       pull-requests: write
     steps:
