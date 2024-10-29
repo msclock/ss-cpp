@@ -5,22 +5,30 @@
 [%- if repo_name == 'ss-cpp' or repo_platform == 'github' %]
     "helpers:pinGitHubActionDigests",
 [%- endif %]
-    ":enablePreCommit",
-    ":maintainLockFilesWeekly"
+    ":enablePreCommit"
   ],
   "automergeType": "pr",
   "automergeStrategy": "merge-commit",
   "platformAutomerge": true,
   "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
 [%- if repo_name == 'ss-cpp' %]
     {
       "matchDepTypes": [
         "action"
       ],
       "postUpgradeTasks": {
-          "commands": [
-              "find template -type f -exec sed -i -E {{ '\'s/{{{replace \\"/\\" \\"\\\\/\\" depName}}}(.*)@{{{currentDigest}}} # {{{currentValue}}}/{{{replace \\"/\\" \\"\\\\/\\" depName}}}\\\\1@{{{newDigest}}} # {{{newValue}}}/g\' {} +' }}"
-          ]
+        "commands": [
+          "find template -type f -exec sed -i -E {{ '\'s/{{{replace \\"/\\" \\"\\\\/\\" depName}}}(.*)@{{{currentDigest}}} # {{{currentValue}}}/{{{replace \\"/\\" \\"\\\\/\\" depName}}}\\\\1@{{{newDigest}}} # {{{newValue}}}/g\' {} +' }}"
+        ]
       }
     },
     {
@@ -59,7 +67,6 @@
     {
       "description": "Group vcpkg.json baseline with auto-update",
       "groupName": "group vcpkg-baseline",
-      "extends": ["schedule:automergeMonthly"],
       "addLabels": [
 [%- if repo_platform == 'github' %]
         "auto-approval",
@@ -73,7 +80,6 @@
       "matchFileNames": [
         "vcpkg.json"
       ],
-      "automerge": true,
       "postUpgradeTasks": {
         "commands": [
           "find template -type f -name 'vcpkg.json.jinja' -exec sed -i {{ '\'s|{{{currentDigest}}}|{{{newDigest}}}|g\'' }} {} +"
@@ -84,7 +90,6 @@
     {
       "description": "Group renovate docker tag and pre-commit-hooks tag",
       "groupName": "renovate group",
-      "extends": ["schedule:automergeMonthly"],
       "addLabels": [
 [%- if repo_platform == 'github' %]
         "auto-approval",
@@ -95,7 +100,6 @@
         "docker",
         "github-tags"
       ],
-      "automerge": true,
       "matchDepNames": [
 [%- if repo_platform == 'github' %]
         "ghcr.io/renovatebot/renovate",
