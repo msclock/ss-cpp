@@ -8,7 +8,10 @@
     "fmt",
     "spdlog",
     "cmake-modules",
-    "robotology-cmake-ycm"
+    "robotology-cmake-ycm",
+    "openssl",
+    "qtbase",
+    "qttools"
   ],
   "overrides": [
     {
@@ -26,6 +29,18 @@
     {
       "name": "robotology-cmake-ycm",
       "version": "0.16.3"
+    },
+    {
+      "name": "openssl",
+      "version": "3.4.0"
+    },
+    {
+      "name": "qtbase",
+      "version": "6.8.0#2"
+    },
+    {
+      "name": "qttools",
+      "version": "6.8.0"
     }
   ],
   "features": {

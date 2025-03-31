@@ -1,0 +1,15 @@
+{
+    "app": {
+        "name": "Desktop Qt Demo",
+        "version": "1.0.0",
+        "theme": "light"
+    },
+    "network": {
+        "api_endpoint": "https://api.github.com/zen",
+        "timeout": 5000
+    },
+    "database": {
+        "type": "sqlite",
+        "name": ":memory:"
+    }
+}

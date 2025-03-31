@@ -1,4 +1,5 @@
 {
+  "cmake.automaticReconfigure": false,
   "cmake.configureOnEdit": false,
   "cmake.options.statusBarVisibility": "icon",
   "cmake.useCMakePresets": "always",
@@ -94,6 +95,30 @@
     "numbers": "cpp",
     "semaphore": "cpp",
     "codecvt": "cpp",
-    "source_location": "cpp"
+    "source_location": "cpp",
+    "qapplication": "cpp",
+    "qtranslator": "cpp",
+    "qcoreapplication": "cpp",
+    "qlocale": "cpp",
+    "qpushbutton": "cpp",
+    "usage": "cpp",
+    "qmainwindow": "cpp",
+    "coroutine": "cpp",
+    "csignal": "cpp",
+    "future": "cpp",
+    "regex": "cpp",
+    "shared_mutex": "cpp",
+    "stack": "cpp",
+    "stacktrace": "cpp",
+    "stdfloat": "cpp",
+    "resumable": "cpp",
+    "qsettings": "cpp",
+    "qdialog": "cpp",
+    "qmenubar": "cpp",
+    "qformlayout": "cpp",
+    "qnetworkaccessmanager": "cpp",
+    "qstring": "cpp",
+    "qlineedit": "cpp",
+    "qdialogbuttonbox": "cpp"
   }
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RCC>
+    <qresource prefix="/">
+        <file>styles/style.qss</file>
+    </qresource>
+</RCC>
