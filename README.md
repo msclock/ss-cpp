@@ -52,3 +52,15 @@ A continuously evolving basic template for cpp development.
 ## License
 
 MIT License, for more details, see the [LICENSE](https://github.com/serious-scaffold/ss-cpp/blob/master/LICENSE) file.
+
+<!--
+uiqt:
+https://www.youtube.com/watch?v=g7yijWiZTmI&list=PL6CJYn40gN6iFcTyItvnE5nOmJR8qk_7o
+https://www.youtube.com/watch?v=wR_jXBUW11g&list=PLP7UmEJ9z4mpi0JXcPS0VRK-7eFAfROZI&index=3
+https://www.youtube.com/watch?v=gzoWIJQDA1c
+
+https://github.com/emericg/QmlAppTemplate/
+https://github.com/kaka-lin/qt-template
+https://github.com/219-design/qt-qml-project-template-with-ci/tree/master
+https://github.com/ranguli/cpp-qt-template/
+ -->

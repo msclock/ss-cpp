@@ -1,15 +1,14 @@
 #include "settingsdialog.hpp"
 #include "settings.hpp"
 
+#include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QPushButton>
-#include <QDialogButtonBox>
 #include <QVBoxLayout>
 
 namespace uiqt {
 
-SettingsDialog::SettingsDialog(QWidget* parent)
-    : QDialog(parent) {
+SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
     setupUi();
     loadSettings();
 }
@@ -44,9 +43,7 @@ void SettingsDialog::setupUi() {
     layout->addLayout(formLayout);
 
     // Buttons
-    auto* buttonBox = new QDialogButtonBox(
-        QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
-        Qt::Horizontal, this);
+    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &SettingsDialog::saveSettings);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &SettingsDialog::reject);
     layout->addWidget(buttonBox);

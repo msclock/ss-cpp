@@ -1,8 +1,8 @@
 #pragma once
 
+#include <QComboBox>
 #include <QDialog>
 #include <QLineEdit>
-#include <QComboBox>
 #include <QSpinBox>
 
 namespace uiqt {

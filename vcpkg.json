@@ -10,6 +10,7 @@
     "cmake-modules",
     "robotology-cmake-ycm",
     "openssl",
+    "qtdeclarative",
     "qtbase",
     "qttools"
   ],
@@ -32,15 +33,25 @@
     },
     {
       "name": "openssl",
-      "version": "3.4.0"
+      "version": "3.4.1"
     },
     {
       "name": "qtbase",
-      "version": "6.8.0#2"
+      "version": "6.8.2",
+      "port-version": 2
     },
     {
       "name": "qttools",
-      "version": "6.8.0"
+      "version": "6.8.2"
+    },
+    {
+      "name": "freetype",
+      "version": "2.13.2"
+    },
+    {
+      "name": "dbus",
+      "version": "1.16.2",
+      "port-version": 1
     }
   ],
   "features": {

@@ -17,7 +17,7 @@ private slots:
     void onNetworkRequest();
     void onDatabaseQuery();
     void showSettings();
-    void applyTheme(const QString& theme);
+    void applyTheme(const QString &theme);
 
 private:
     void setupUi();

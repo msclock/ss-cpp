@@ -1,18 +1,17 @@
-#include "gtest/gtest.h"
+#include "catch.hpp"
 
 #include "_version.hpp"
 #include "distribution.hpp"
 
-TEST(uiqt, version) {
-    const auto* const version = git_ProjectVersion();
-    EXPECT_STRNE(version, "");
+TEST_CASE("uiqt_version", "[uiqt]") {
+    REQUIRE(uiqt::ProjectVersion().empty() == false);
 }
 
-TEST(uiqt, distribution) {
+TEST_CASE("uiqt_distribution", "[uiqt]") {
     const auto is_debug = uiqt::distribution::is_debug();
 #ifdef _DEBUG
-    EXPECT_TRUE(is_debug);
+    REQUIRE(is_debug == true);
 #else
-    EXPECT_FALSE(is_debug);
+    REQUIRE(is_debug == false);
 #endif
 }

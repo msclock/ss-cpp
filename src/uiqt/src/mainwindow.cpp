@@ -2,22 +2,20 @@
 #include "settings.hpp"
 #include "settingsdialog.hpp"
 
+#include <QApplication>
 #include <QMenuBar>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QWidget>
 #include <QMessageBox>
 #include <QNetworkReply>
-#include <QSqlQuery>
+#include <QPushButton>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QStatusBar>
-#include <QApplication>
-#include <spdlog/spdlog.h>
+#include <QVBoxLayout>
+#include <QWidget>
 
 namespace uiqt {
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), networkManager(nullptr) {
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), networkManager(nullptr) {
     setupUi();
     setupMenuBar();
     setupStatusBar();
@@ -36,13 +34,13 @@ void MainWindow::setupUi() {
     setWindowTitle(tr("Desktop Qt Demo"));
     resize(800, 600);
 
-    auto *centralWidget = new QWidget(this);
-    auto *layout = new QVBoxLayout(centralWidget);
+    auto* centralWidget = new QWidget(this);
+    auto* layout = new QVBoxLayout(centralWidget);
 
-    auto *networkButton = new QPushButton(tr("Test Network"), centralWidget);
+    auto* networkButton = new QPushButton(tr("Test Network"), centralWidget);
     connect(networkButton, &QPushButton::clicked, this, &MainWindow::onNetworkRequest);
 
-    auto *dbButton = new QPushButton(tr("Test Database"), centralWidget);
+    auto* dbButton = new QPushButton(tr("Test Database"), centralWidget);
     connect(dbButton, &QPushButton::clicked, this, &MainWindow::onDatabaseQuery);
 
     layout->addWidget(networkButton);
@@ -76,7 +74,7 @@ void MainWindow::setupDatabase() {
     database.setDatabaseName(settings.getDatabaseName());
 
     if (!database.open()) {
-        spdlog::error("Failed to open database: {}", database.lastError().text().toStdString());
+        qWarning()<<"Failed to open database: " << database.lastError().text().toStdString();
         QMessageBox::warning(this, tr("Database Error"), tr("Could not open database"));
         return;
     }
@@ -113,7 +111,8 @@ void MainWindow::applyTheme(const QString& theme) {
             QPushButton:hover { background-color: #4a4a4a; }
             QPushButton:pressed { background-color: #2d2d2d; }
         )");
-    } else {
+    }
+    else {
         // 设置浅色主题
         qApp->setStyleSheet(R"(
             QMainWindow { background-color: #f5f5f5; color: #000000; }
@@ -136,15 +135,16 @@ void MainWindow::onNetworkRequest() {
     request.setTransferTimeout(settings.getNetworkTimeout());
 
     statusBar()->showMessage(tr("Sending network request..."));
-    auto *reply = networkManager->get(request);
+    auto* reply = networkManager->get(request);
 
     connect(reply, &QNetworkReply::finished, this, [reply, this]() {
         if (reply->error() == QNetworkReply::NoError) {
             QString response = QString::fromUtf8(reply->readAll());
             QMessageBox::information(this, tr("Network Response"), response);
             statusBar()->showMessage(tr("Network request completed"), 3000);
-        } else {
-            spdlog::error("Network error: {}", reply->errorString().toStdString());
+        }
+        else {
+            qWarning()<<"Network error: "<< reply->errorString().toStdString();
             QMessageBox::warning(this, tr("Network Error"), reply->errorString());
             statusBar()->showMessage(tr("Network request failed"), 3000);
         }
@@ -159,9 +159,7 @@ void MainWindow::onDatabaseQuery() {
 
     QString result;
     while (query.next()) {
-        result += QString("ID: %1, Name: %2\n")
-                     .arg(query.value(0).toInt())
-                     .arg(query.value(1).toString());
+        result += QString("ID: %1, Name: %2\n").arg(query.value(0).toInt()).arg(query.value(1).toString());
     }
 
     QMessageBox::information(this, tr("Database Query Result"), result);

@@ -9,9 +9,8 @@ Settings& Settings::instance() {
 }
 
 Settings::Settings()
-    : m_settings(std::make_unique<QSettings>(
-          QCoreApplication::applicationDirPath() + "/config.ini",
-          QSettings::IniFormat)) {
+    : m_settings(
+          std::make_unique<QSettings>(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat)) {
     // 设置默认值
     if (!m_settings->contains("theme")) {
         m_settings->setValue("theme", "light");
